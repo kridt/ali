@@ -1,24 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Dashboard from "./pages/Dashboard";
+import LoginSite from "./pages/LoginSite";
+import { useEffect, useState } from "react";
+import { UserContext } from "./contexts/UserContext";
+import { auth } from "./Firebase";
+import AddKunde from "./pages/AddKunde";
+import AllKunder from "./pages/AllKunder";
 
 function App() {
+  const [user, setUser] = useState(auth.currentUser);
+
+  useEffect(() => {
+    auth.currentUser && setUser(auth.currentUser);
+  }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <UserContext.Provider value={{ user, setUser }}>
+      <div className="App">
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<LoginSite />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/addKunde" element={<AddKunde />} />
+            <Route path="/allKunder" element={<AllKunder />} />
+          </Routes>
+        </BrowserRouter>
+      </div>
+    </UserContext.Provider>
   );
 }
 
