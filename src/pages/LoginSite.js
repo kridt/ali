@@ -4,7 +4,7 @@ import { UserContext } from "../contexts/UserContext";
 import { auth } from "../Firebase";
 
 export default function LoginSite() {
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -12,7 +12,7 @@ export default function LoginSite() {
     if (user) {
       navigate("/dashboard");
     }
-  }, []);
+  }, [user, navigate]);
 
   async function handleSubmit(event) {
     event.preventDefault();

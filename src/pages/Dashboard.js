@@ -1,11 +1,11 @@
-import React, { useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { UserContext } from "../contexts/UserContext";
-import { auth } from "../Firebase";
+import React from "react";
+import { Link } from "react-router-dom";
+/* import { UserContext } from "../contexts/UserContext";
+import { auth } from "../Firebase"; */
 
 export default function Dashboard() {
-  const { user, setUser } = useContext(UserContext);
-  const navigate = useNavigate();
+  /*  const { user, setUser } = useContext(UserContext); */
+  /*  const navigate = useNavigate(); */
   return (
     <div>
       <h1>Dashboard</h1>
