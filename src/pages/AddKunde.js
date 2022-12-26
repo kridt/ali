@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { database } from "../Firebase";
+import Geocode from "react-geocode";
 
 export default function AddKunde() {
   const navigate = useNavigate();
@@ -24,24 +25,44 @@ export default function AddKunde() {
 
   function handleAddKunde(e) {
     e.preventDefault();
-    const data = {
+    const fullAdress = `${e.target.adresse.value}, ${e.target.postnummer.value} ${city}`;
+    var data = {
       name: e.target.name.value,
       adresse: e.target.adresse.value,
       postnummer: e.target.postnummer.value,
       by: e.target.by.value,
+      geoLocation: {
+        lat: 0,
+        lng: 0,
+      },
       telefon: e.target.telefon.value,
       date: e.target.date.value,
+      timeStampOfCreation: Date.now(),
     };
 
-    database
-      .collection("kunder")
-      .doc(e.target.telefon.value)
-      .set(data)
-      .then(() => {
-        navigate("/dashboard");
-      });
+    Geocode.setApiKey("AIzaSyDkVS4-ZXSTUhxvvYg-3f7AAWkTKmt1keE");
+    Geocode.setRegion("dk");
 
-    console.log(data);
+    Geocode.fromAddress(fullAdress).then(
+      (response) => {
+        const { lat, lng } = response.results[0].geometry.location;
+        console.log(lat, lng);
+        data.geoLocation.lat = lat;
+        data.geoLocation.lng = lng;
+
+        console.log(data);
+        database
+          .collection("kunder")
+          .doc(e.target.telefon.value)
+          .set(data)
+          .then(() => {
+            navigate("/dashboard");
+          });
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
   }
 
   return (

@@ -16,6 +16,9 @@ export default function Dashboard() {
       <Link to="/allKunder">Se alle kunder</Link>
       <br />
       <br />
+      <Link to="/kort">Se kortet</Link>
+      <br />
+      <br />
       {/* <button
         onClick={() => {
           auth.signOut();
