@@ -19,6 +19,9 @@ export default function Dashboard() {
       <Link to="/kort">Se kortet</Link>
       <br />
       <br />
+      <Link to="/service">Har du lavet service</Link>
+      <br />
+      <br />
       {/* <button
         onClick={() => {
           auth.signOut();

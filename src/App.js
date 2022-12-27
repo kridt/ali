@@ -8,6 +8,7 @@ import { auth } from "./Firebase";
 import AddKunde from "./pages/AddKunde";
 import AllKunder from "./pages/AllKunder";
 import MapSite from "./pages/MapSite";
+import Service from "./pages/Service";
 
 function App() {
   const [user, setUser] = useState(auth.currentUser);
@@ -25,6 +26,7 @@ function App() {
             <Route path="/addKunde" element={<AddKunde />} />
             <Route path="/allKunder" element={<AllKunder />} />
             <Route path="/kort" element={<MapSite />} />
+            <Route path="/service" element={<Service />} />
           </Routes>
         </BrowserRouter>
       </div>
