@@ -4,12 +4,12 @@ import { database } from "../Firebase";
 
 export default function MapSite() {
   const [allKunder, setAllKunder] = React.useState([]);
-  const [kundeFocus, setKundeFocus] = React.useState({
+  const [kundeFocus, setKundeFocus] = React.useState({});
+  
+  const [center, setCenter] = React.useState({
     lat: 55.67023589999999,
     lng: 11.8794193,
   });
-  
-  const [center, setCenter] = React.useState({});
   
   useEffect(() => {
     database
@@ -43,6 +43,7 @@ export default function MapSite() {
     };
     setKundeFocus(allInfo);
     console.log(item);
+    setCenter(item.geoLocation)
   }
 
   return isLoaded ? (
