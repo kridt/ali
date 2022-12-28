@@ -4,8 +4,13 @@ import { database } from "../Firebase";
 
 export default function MapSite() {
   const [allKunder, setAllKunder] = React.useState([]);
-  const [kundeFocus, setKundeFocus] = React.useState({});
-
+  const [kundeFocus, setKundeFocus] = React.useState({
+    lat: 55.67023589999999,
+    lng: 11.8794193,
+  });
+  
+  const [center, setCenter] = React.useState({});
+  
   useEffect(() => {
     database
       .collection("kunder")
@@ -21,10 +26,6 @@ export default function MapSite() {
     height: "50vh",
   };
 
-  const center = {
-    lat: 55.67023589999999,
-    lng: 11.8794193,
-  };
 
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
