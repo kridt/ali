@@ -1,13 +1,19 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { database } from "../Firebase";
+import { auth, database } from "../Firebase";
 import Geocode from "react-geocode";
+import "./AddKunde.css";
 
 export default function AddKunde() {
   const navigate = useNavigate();
   const [city, setCity] = useState("");
 
+  useEffect(() => {
+    if (auth?.currentUser?.email === undefined) {
+      navigate("/");
+    }
+  }, [navigate]);
   function citySetter(e) {
     if (e.target.value.length === 4) {
       axios.get("/postnumre.json").then((res) => {
@@ -40,7 +46,7 @@ export default function AddKunde() {
       timeStampOfCreation: Date.now(),
     };
 
-    Geocode.setApiKey("AIzaSyDkVS4-ZXSTUhxvvYg-3f7AAWkTKmt1keE");
+    Geocode.setApiKey(process.env.REACT_APP_GOOGLEMAPS);
     Geocode.setRegion("dk");
 
     Geocode.fromAddress(fullAdress).then(
@@ -52,6 +58,8 @@ export default function AddKunde() {
 
         console.log(data);
         database
+          .collection("users")
+          .doc(auth.currentUser.uid)
           .collection("kunder")
           .doc(e.target.telefon.value)
           .set(data)
@@ -67,52 +75,54 @@ export default function AddKunde() {
 
   return (
     <div>
-      <button onClick={() => navigate("/dashboard")}>Tilbage</button>
-      <h1>Tilføj en ny kunde</h1>
+      <div className="add-customer-container">
+        <button onClick={() => navigate("/dashboard")}>Tilbage</button>
+        <h1>Tilføj en ny kunde</h1>
 
-      <form onSubmit={(e) => handleAddKunde(e)}>
-        <div>
-          <label htmlFor="name">Navn: </label>
-          <input required type="text" name="name" id="name" />
-        </div>
-        <br />
-        <div>
-          <label htmlFor="adresse">Adresse: </label>
-          <input required type="text" name="adresse" id="adresse" />
-        </div>
-        <br />
-        <div>
-          <label htmlFor="postnummer">Postnummer: </label>
-          <input
-            required
-            onChange={(e) => citySetter(e)}
-            type="tel"
-            name="postnummer"
-            id="postnummer"
-          />
-        </div>
+        <form onSubmit={(e) => handleAddKunde(e)}>
+          <div>
+            <label htmlFor="name">Navn: </label>
+            <input required type="text" name="name" id="name" />
+          </div>
+          <br />
+          <div>
+            <label htmlFor="adresse">Adresse: </label>
+            <input required type="text" name="adresse" id="adresse" />
+          </div>
+          <br />
+          <div>
+            <label htmlFor="postnummer">Postnummer: </label>
+            <input
+              required
+              onChange={(e) => citySetter(e)}
+              type="tel"
+              name="postnummer"
+              id="postnummer"
+            />
+          </div>
 
-        <br />
-        <div>
-          <label htmlFor="by">By: </label>
-          <input required type="text" defaultValue={city} name="by" id="by" />
-        </div>
-        <br />
-        <div>
-          <label htmlFor="telefon">Telefon: </label>
-          <input required type="tel" name="telefon" id="telefon" />
-        </div>
-        <br />
-        <div>
-          <label htmlFor="dato">Dato for opsætning: </label>
-          <input required type="date" name="date" id="date" />
-        </div>
-        <br />
-        <br />
-        <div>
-          <button type="submit">Tilføj kunde</button>
-        </div>
-      </form>
+          <br />
+          <div>
+            <label htmlFor="by">By: </label>
+            <input required type="text" defaultValue={city} name="by" id="by" />
+          </div>
+          <br />
+          <div>
+            <label htmlFor="telefon">Telefon: </label>
+            <input required type="tel" name="telefon" id="telefon" />
+          </div>
+          <br />
+          <div>
+            <label htmlFor="dato">Dato for opsætning: </label>
+            <input required type="date" name="date" id="date" />
+          </div>
+          <br />
+          <br />
+          <div>
+            <button type="submit">Tilføj kunde</button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

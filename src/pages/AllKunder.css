@@ -1,0 +1,30 @@
+.customer-list-container {
+  padding: 10px;
+}
+
+table {
+  width: 100%;
+}
+
+th,
+td {
+  font-size: 14px;
+  white-space: nowrap;
+  padding: 1em 0;
+}
+
+th {
+  background-color: #555;
+  color: #fff;
+}
+
+tr:nth-child(even) {
+  background-color: #333;
+}
+table tr {
+  padding-top: 10em;
+}
+td {
+  border: none;
+  border-bottom: 1px solid #ddd;
+}

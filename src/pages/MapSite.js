@@ -1,31 +1,37 @@
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import React, { useEffect } from "react";
-import { database } from "../Firebase";
+import { useNavigate } from "react-router-dom";
+import { auth, database } from "../Firebase";
 
 export default function MapSite() {
   const [allKunder, setAllKunder] = React.useState([]);
   const [kundeFocus, setKundeFocus] = React.useState({});
-  
+  const navigate = useNavigate();
   const [center, setCenter] = React.useState({
     lat: 55.67023589999999,
     lng: 11.8794193,
   });
-  
+
   useEffect(() => {
+    if (auth?.currentUser?.email === undefined) {
+      navigate("/");
+    }
+
     database
+      .collection("users")
+      .doc(auth.currentUser.uid)
       .collection("kunder")
       .get()
       .then((data) => {
         const kunder = data.docs.map((doc) => doc.data());
         setAllKunder(kunder);
       });
-  }, []);
+  }, [navigate]);
 
   const containerStyle = {
     width: "100vw",
     height: "50vh",
   };
-
 
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
@@ -43,7 +49,7 @@ export default function MapSite() {
     };
     setKundeFocus(allInfo);
     console.log(item);
-    setCenter(item.geoLocation)
+    setCenter(item.geoLocation);
   }
 
   return isLoaded ? (
@@ -80,6 +86,7 @@ export default function MapSite() {
         <p>Navn: {kundeFocus && kundeFocus.name}</p>
         Adresse:{" "}
         <a
+          rel="noreferrer"
           target={"_blank"}
           href={`http://maps.google.com/?q=${
             kundeFocus && kundeFocus?.adresse
@@ -100,6 +107,7 @@ export default function MapSite() {
           {kundeFocus && JSON.stringify(kundeFocus.daysTilService)} dage
         </p>
       </div>
+      <button onClick={() => navigate("/dashboard")}>Tilbage</button>
     </>
   ) : (
     <></>

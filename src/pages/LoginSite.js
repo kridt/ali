@@ -2,13 +2,13 @@ import React, { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
 import { auth } from "../Firebase";
+import "./LogIn.css";
 
 export default function LoginSite() {
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(user);
     if (user) {
       navigate("/dashboard");
     }
@@ -35,7 +35,7 @@ export default function LoginSite() {
   }
 
   return (
-    <div>
+    <div className="login-container">
       <h1>LoginSite</h1>
 
       <form onSubmit={(event) => handleSubmit(event)}>
