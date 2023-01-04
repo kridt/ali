@@ -2,6 +2,7 @@ import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth, database } from "../Firebase";
+import "./MapSite.css";
 
 export default function MapSite() {
   const [allKunder, setAllKunder] = React.useState([]);
@@ -19,7 +20,7 @@ export default function MapSite() {
 
     database
       .collection("users")
-      .doc(auth.currentUser.uid)
+      .doc(auth?.currentUser?.uid)
       .collection("kunder")
       .get()
       .then((data) => {
